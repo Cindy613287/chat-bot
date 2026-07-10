@@ -1,0 +1,16 @@
+# 敏感信息（包含 API Key）
+config.py
+
+# 用户数据（隐私）
+memory.json
+
+# PDF 大文件
+*.pdf
+
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 系统文件
+.DS_Store
+Thumbs.db

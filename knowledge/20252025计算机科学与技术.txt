@@ -1,0 +1,374 @@
+
+============================================================
+第 1 页
+============================================================
+
+2025计算机科学与技术专业培养计划
+一、培养目标
+二、毕业要求
+三、主干学科
+四、专业核心课程
+五、双语、全英语教学课程
+六、计划学制
+4 年。
+七、授予学位
+null 学士学位。
+八、学分基本要求
+毕业学分要求：165 学分。第二课堂学分要求：6学分。
+九、辅修专业学分要求及授予学位
+学分要求：32 学分，授予学位：辅修null学士学位（申请辅修学位，需加修综合实践（论文）10学
+分 ）。
+十、课程设置与学分分布
+(一)先修课程 最低要求0学分
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+X126001 大学信息技术基础 1.0 16 1.0 0.0 一1 考查
+University Information Technology
+Foundation AP
+X810002 大学数学基础 2.0 32 2.0 0.0 一1 考查
+Fundamentals of College Mathematics
+(二)通识课程 最低要求52.5学分
+1.通识必修课程 最低要求42.5学分
+(1)思政类 最低要求18学分
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+G237002 中国近现代史纲要 2.0 32 2.0 0.0 一1 考试
+Compendium of Chinese Modern History
+G237016 “四史”教育 1.0 16 1.0 0.0 一2 考查
+“Four Histories” Education
+G237019 思想道德与法治 3.0 48 3.0 0.0 一2 考试
+
+────────────────────────────────────────────────────────────
+
+============================================================
+第 2 页
+============================================================
+
+Value,Morality and Rule of Law
+G237003 马克思主义基本原理 3.0 48 3.0 0.0 二1 考试
+The Fundamental tenets of Marxism
+毛泽东思想和中国特色社会主义理论
+G237017 2.0 32 2.0 0.0 二1 考试
+体系概论
+Introduction to Mao Zedong’s Thought
+and Theoretical system of socialism with
+Chinese characteristics
+习近平新时代中国特色社会主义思想
+G237020 3.0 48 3.0 0.0 二2 考试
+概论
+Introduction To Xi Jinping Thought on
+Socialism with Chinese Characteristics
+for a New Era
+G737001 思想政治理论课社会实践 2.0 40 0.0 二3 考查
+Extracurricular Practice for Ideological
+and Political Theory Course
+G237021 形势与政策 2.0 64 2.0 0.0 四2 考查
+Situation and Policy
+(2)体育类 最低要求7.5学分
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+G113035 军事理论 2.0 36 6.0 0.0 一1 考查
+Military theory
+G213001 体育Ⅰ 1.0 32 2.0 0.0 一1 考试
+Physical education
+G713007 军事技能 1.0 112 0.0 一1 考查
+Military skill training
+G213002 体育Ⅱ 1.0 32 2.0 0.0 一2 考试
+Physical education
+G213003 体育Ⅲ 1.0 32 2.0 0.0 二1 考试
+Physical education
+G213004 体育Ⅳ 1.0 32 2.0 0.0 二2 考试
+Physical education
+G213007 体质健康训练Ⅲ 0.25 8 0.0 三1 考查
+Physical Training
+G213008 体质健康训练Ⅳ 0.25 8 0.0 三2 考查
+Physical Training
+
+────────────────────────────────────────────────────────────
+
+============================================================
+第 3 页
+============================================================
+
+(3)外语类 最低要求7学分
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+G709040 通用英语（实践） 1.0 40 0.0 一1 考查
+English for General Purposes practice
+course)
+G209065 通用英语 2.0 32 2.0 0.0 一1 考试
+English for General Purposes
+G209067 通用学术英语 B 4.0 64 4.0 0.0 一2 考试
+English for General Academic Purposes B
+(4)心理健康教育类 最低要求2学分
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+G207010 心理健康教育实践 1.0 32 0.0 一1 考查
+mental health practice course
+G207007 心理健康与自我成长 1.0 16 1.0 0.0 一1 考试
+Mental health and personal growth
+(5)国家安全教育 最低要求1学分
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+G227004 国家安全教育 1.0 16 1.0 0.0 一1 考查
+Tutorial of National Security in General
+(6)人工智能类 最低要求7学分
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+G226002 程序设计基础C 4.0 64 4.0 16.0 一1 考试
+C Programming
+G226023 人工智能导论 3.0 48 3.0 12.0 一2 考试
+Introduction to Artificial Intelligence
+
+────────────────────────────────────────────────────────────
+
+============================================================
+第 4 页
+============================================================
+
+2.通识选修课程 最低要求10学分 (学生需至少修满10学分，其中在艺术修养、社会责任、
+创新创业三个模块中至少各修一门课程，其中社会责任模块限选工程经济；在其余四个模块（人文情怀
+、科学素养、国际视野、人工智能）中至少选修二个模块的课程)
+(1)艺术修养 最低要求1学分
+通识选修课分为艺术修养模块。学生应在每一个模块内至少选修一门课程。
+(2)创新创业 最低要求1学分
+通识选修课分为创新创业模块。学生应在每一个模块内至少选修一门课程。
+(3)其他通识选修 最低要求1学分
+①人文情怀 最低要求1学分
+通识选修课分为人文情怀模块。学生应在每一个模块内至少选修一门课程。
+②科学素养 最低要求1学分
+通识选修课分为科学素养模块。学生应在每一个模块内至少选修一门课程。
+③社会责任 最低要求1学分
+通识选修课分为社会责任模块。学生应在每一个模块内至少选修一门课程。
+④国际视野 最低要求1学分
+通识选修课分为国际视野模块。学生应在每一个模块内至少选修一门课程。
+⑤人工智能 最低要求1学分
+通识选修课分为人工智能模块。学生应在每一个模块内至少选修一门课程。
+(三)学科基础课程 最低要求55学分
+1.学科基础必修课程 最低要求53学分
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+G210013 高等数学Ⅰ 5.0 80 5.0 0.0 一1 考试
+Calculus
+G210380 线性代数A 3.0 48 3.0 0.0 一1 考试
+Linear Algebra A
+G410015 大学物理实验 A 1.5 48 3.0 48.0 一1 考查
+University Physics Experiment A
+G726001 C++程序设计课程设计 1.0 20 0.0 一2 考查
+Course Design of C++ Programming Design
+G210024 大学物理Ⅰ 3.0 48 3.0 0.0 一2 考试
+University Physics platform courses
+
+────────────────────────────────────────────────────────────
+
+============================================================
+第 5 页
+============================================================
+
+G210092 高等数学Ⅱ 6.0 96 6.0 0.0 一2 考试
+Calculus
+G126599 C++程序设计 3.0 48 3.0 16.0 一2 考试 √
+C++ Programming
+G126139 离散数学 4.0 64 4.0 0.0 一2 考试 √
+Discrete Mathematics
+G210382 概率论与数理统计A 3.0 48 3.0 0.0 二1 考试
+Probability and Statistics A
+G210025 大学物理ⅡB 2.5 40 2.5 0.0 二1 考试
+University Physics Bcluster courses
+G126046 计算机网络原理 3.0 48 3.0 8.0 二1 考试 √
+Computer Networks
+G726014 计算机网络课程设计 1.0 0 0.0 二1 考查
+Computer Networks Curriculum Design
+G726017 数据结构课程设计 1.0 0 0.0 二1 考查
+Data Structures Curriculum Design
+G126085 数据结构 4.0 64 4.0 16.0 二1 考试 √
+Data Structures
+G126088 数据库原理及应用 3.0 48 3.0 8.0 二2 考试 √
+Principles of Database and Its
+Application
+G126140 计算机组成原理 3.0 48 3.0 0.0 二2 考试 √
+Principles of Computer Organization
+G726015 计算机组成课程设计 1.0 0 0.0 二2 考查
+Computer Organization Curriculum Design
+G726018 数据库系统课程设计 1.0 0 0.0 二3 考查
+Database System Curriculum Design
+G126016 操作系统原理 3.0 48 3.0 8.0 三1 考试 √
+Operating Systems
+G726004 操作系统课程设计 1.0 0 0.0 三1 考查
+Operating System Curriculum Design
+2.学科基础选修课程 最低要求2学分
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+G126036 计算方法及实现 2.0 32 2.0 8.0 二2 考查
+Numerical Calculation Method and its
+Implementation
+G126042 计算机体系结构 2.0 32 2.0 0.0 三2 考查
+
+────────────────────────────────────────────────────────────
+
+============================================================
+第 6 页
+============================================================
+
+Computer System Architecture
+(四)专业课程 最低要求57.5学分
+1.专业必修课程 最低要求45.5学分
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+G226008 专业导论 1.0 16 1.0 0.0 一2 考查
+Introduction to Computer Science and
+Technology
+G126092 数字电路与数字逻辑B 4.0 64 4.0 8.0 二2 考试 √
+Digital Circuit and Digital Logic
+G126817 数据挖掘 2.0 32 2.0 8.0 二2 考试 √
+Data Mining
+G726019 数字逻辑电路课程设计 1.0 20 0.0 二2 考查
+Digital Logic Circuit Curriculum Design
+G726109 计算机工程实践 2.0 80 0.0 二3 考查
+Computer Engineering Practice
+G126059 嵌入式系统 3.0 48 3.0 16.0 三1 考试
+Embedded System
+G126582 汇编语言与微机接口 3.0 48 3.0 8.0 三1 考试
+Assembly Language and Microcomputer
+Interface
+G726206 汇编语言与微机接口课程设计 1.0 20 0.0 三1 考查
+Assembly Language and Microcomputer
+Interface Curriculum Design
+G726061 软件工程课程设计 1.0 20 0.0 三1 考查
+Software Engineering Curriculum Design
+G126013 编译原理 3.0 48 3.0 8.0 三1 考试 √
+Principles of Compiler
+G126600 深度学习 2.0 32 2.0 8.0 三1 考查
+Deep Learning
+G126569 软件工程 2.0 32 2.0 12.0 三1 考查
+Software Engineering
+G726113 文献检索与论文写作实践 1.0 40 0.0 三2 考查
+Literature search and paper writing
+practice
+G726115 人工智能及应用综合实践 1.5 60 0.0 四1 考查
+Integrated Practice of Artificial
+Intelligence and Applications
+G726114 科研训练与创新实践 2.0 80 0.0 四1 考查
+
+────────────────────────────────────────────────────────────
+
+============================================================
+第 7 页
+============================================================
+
+Research Training and Innovative
+Practice
+G526004 综合实习与劳动教育 4.0 160 0.0 四1 考查
+Comprehensive Internship and Labor
+Education
+G626002 毕业设计 12.0 320 0.0 四2 考查
+Dissertation Project
+2.专业选修课程 最低要求8学分 (算法分析与设计为建议选修)
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+G126150 电路与电子技术基础 3.0 48 3.0 0.0 二1 考试
+Basis of Circuit & Electronic Technique
+G126007 Java程序设计 3.0 48 3.0 16.0 二1 考试
+JAVA Programming
+G126154 Web前端开发 2.0 32 2.0 16.0 二2 考查
+Web Front-end Development
+G126138 自动控制原理 3.0 48 3.0 8.0 二2 考试
+Principles of Automatic Control
+G126097 算法分析与设计 3.0 48 3.0 12.0 二2 考试
+The Design and Analysis of Computer
+Algorithms
+G126136 云计算 2.0 32 2.0 8.0 二2 考查
+Cloud Computing
+G126830 智能物联技术及应用 2.0 32 2.0 0.0 二2 考查
+Artificial Intelligence of Things and
+Applications
+G126827 Web服务器开发 3.0 48 3.0 16.0 三1 考查
+Development Technology on Web Server
+G126831 EDA技术及应用 2.0 32 2.0 0.0 三1 考查
+EDA Technology and Application
+G126151 无线传感器网络 2.0 32 2.0 16.0 三1 考试
+Wireless Sensor Networks
+G126114 无线网络原理 2.0 32 2.0 8.0 三1 考查
+Principles of Wireless Network
+G126086 数据库设计 2.0 32 2.0 8.0 三1 考查
+Database Design
+G126093 数字图像处理 2.0 32 2.0 8.0 三1 考查
+Digital Image Processing
+G126063 人机交互和界面设计 2.0 32 2.0 16.0 三1 考查
+
+────────────────────────────────────────────────────────────
+
+============================================================
+第 8 页
+============================================================
+
+Human-Computer Interaction and Interface
+Design
+G126590 JavaEE技术 3.0 48 3.0 16.0 三1 考查
+JavaEE Technology
+G126222 FPGA原理及应用 2.0 32 2.0 0.0 三1 考查
+Principles and Applications of FPGA
+G126008 Linux系统及其应用 2.0 32 2.0 8.0 三1 考试
+Linux System and its Application
+G126125 信息安全基础 2.0 32 2.0 8.0 三1 考查
+Fundamentals of Information Security
+G126002 C#程序设计 2.0 32 2.0 16.0 三1 考查
+C# Programming
+G126152 单片机原理及应用 2.0 32 2.0 8.0 三2 考试
+Single-chip Microcomputer Principle and
+Application
+G126123 现代控制工程 2.0 32 2.0 0.0 三2 考试
+Modern Control Engineering
+G126589 .NET技术 3.0 48 3.0 16.0 三2 考查
+.NET Technology
+G126212 社交网络与舆情分析 3.0 48 3.0 16.0 三2 考查
+Social Network and Public Opinion
+Analysis
+G126040 计算机控制系统 3.0 48 3.0 8.0 三2 考查
+Computer Control System
+G126219 区块链技术 2.0 32 2.0 8.0 三2 考查
+Block Chain
+G126821 软件定义网络 2.0 32 2.0 8.0 三2 考查
+Software-Defined Networking
+G126847 并行计算与多核编程 3.0 48 3.0 16.0 三2 考查
+Parallel Computing and Multi-Core
+Programming
+G126129 移动应用开发 3.0 48 3.0 16.0 三2 考查
+Mobile Application Development
+G126044 计算机图形学 2.0 32 2.0 8.0 三2 考查
+Computer Graphics
+3.跨专业个性化选修课程 最低要求4学分
+(五)第二课堂 最低要求6学分
+
+────────────────────────────────────────────────────────────
+
+============================================================
+第 9 页
+============================================================
+
+实验学 开设 辅修
+课程编号 课 程 名 称 学分 总学时 周学时 考核方式
+时 学期 课程
+X813002 体能训练 1.0 2 0.0 四2 考查
+Physical Fitness Training
+X797002 综合素质拓展与实践 2.0 2 0.0 四2 考查
+X841003 创新创业实践 1.0 40 0.0 四2 考查
+Innovation and entrepreneurship practice
+X237015 大学生就业指导与实践 1.0 40 0.0 四2 考查
+X813001 军事技能拓展 1.0 32 0.0 四2 考查
+Military skill training extended
+执笔者：
+审核者：
+
+────────────────────────────────────────────────────────────
