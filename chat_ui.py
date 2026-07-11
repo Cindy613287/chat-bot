@@ -1,7 +1,11 @@
 # chat_ui.py
 import streamlit as st
 from openai import OpenAI
-from config import API_KEY, DEFAULT_BASE_URL, DEFAULT_MODEL
+
+# 从 Secrets 读取 API Key
+API_KEY = st.secrets["DEEPSEEK_API_KEY"]
+DEFAULT_BASE_URL = "https://api.deepseek.com"
+DEFAULT_MODEL = "deepseek-chat"
 from datetime import datetime
 import os
 import json
