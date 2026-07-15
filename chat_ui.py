@@ -1,22 +1,27 @@
-# chat_ui.py
 import streamlit as st
 from openai import OpenAI
 
-# 从 Secrets 读取 API Key
+# 从 Secrets 读取 API Key（公网部署用）
 API_KEY = st.secrets["DEEPSEEK_API_KEY"]
 DEFAULT_BASE_URL = "https://api.deepseek.com"
 DEFAULT_MODEL = "deepseek-chat"
 from datetime import datetime
 import os
 import json
+import hashlib
 import re
+
+# ========== 密码工具函数 ==========
+def hash_password(password):
+    """对密码进行 SHA-256 哈希加密"""
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def verify_password(password, password_hash):
+    """验证密码是否正确"""
+    return hash_password(password) == password_hash
 
 # ========== 知识库读取函数 ==========
 def load_knowledge():
-    """
-    读取 knowledge 文件夹下所有 .txt 文件的内容
-    返回：一个字符串，包含所有文件的内容
-    """
     knowledge_dir = "knowledge"
     all_content = ""
     
@@ -40,18 +45,12 @@ def load_knowledge():
 
 # ========== 多用户记忆管理函数 ==========
 def load_all_memory():
-    """
-    读取完整的 memory.json，返回所有用户的数据
-    """
     default_data = {}
     try:
         with open("memory.json", "r", encoding="utf-8") as f:
             data = json.load(f)
-            # 兼容旧格式
             if "用户信息" in data or "待办任务" in data:
-                new_data = {
-                    "默认用户": data
-                }
+                new_data = {"默认用户": data}
                 save_all_memory(new_data)
                 return new_data
             return data
@@ -61,30 +60,23 @@ def load_all_memory():
         return default_data
 
 def save_all_memory(all_data):
-    """
-    保存所有用户的数据到 memory.json
-    """
     with open("memory.json", "w", encoding="utf-8") as f:
         json.dump(all_data, f, ensure_ascii=False, indent=2)
 
 def get_user_memory(user_id):
-    """
-    获取某个用户的记忆数据
-    游客模式：只返回内存数据，不读写硬盘
-    """
-    # 如果是游客，返回临时数据（不保存到硬盘）
     if user_id == "游客":
         if "tourist_data" not in st.session_state:
             st.session_state.tourist_data = {
+                "密码": None,
                 "用户信息": {},
                 "待办任务": []
             }
         return st.session_state.tourist_data
     
-    # 登录用户：从硬盘读取
     all_data = load_all_memory()
     if user_id not in all_data:
         all_data[user_id] = {
+            "密码": None,
             "用户信息": {},
             "待办任务": []
         }
@@ -92,48 +84,43 @@ def get_user_memory(user_id):
     return all_data[user_id]
 
 def save_user_memory(user_id, user_data):
-    """
-    保存某个用户的记忆数据
-    游客模式：只保存到内存，不写硬盘
-    """
-    # 如果是游客，保存到 session_state
     if user_id == "游客":
         st.session_state.tourist_data = user_data
         return
-    
-    # 登录用户：保存到硬盘
     all_data = load_all_memory()
     all_data[user_id] = user_data
     save_all_memory(all_data)
 
-def migrate_tourist_data(username):
-    """
-    将游客数据迁移到登录用户
-    """
+def migrate_tourist_data(username, password_hash=None):
     if "tourist_data" in st.session_state and st.session_state.tourist_data:
         tourist_data = st.session_state.tourist_data
-        # 如果有数据，保存到登录用户
         if tourist_data["用户信息"] or tourist_data["待办任务"]:
-            save_user_memory(username, tourist_data)
-        # 清空游客数据
-        st.session_state.tourist_data = {
-            "用户信息": {},
-            "待办任务": []
-        }
+            user_data = get_user_memory(username)
+            if tourist_data["用户信息"]:
+                user_data["用户信息"].update(tourist_data["用户信息"])
+            if tourist_data["待办任务"]:
+                user_data["待办任务"].extend(tourist_data["待办任务"])
+            if password_hash:
+                user_data["密码"] = password_hash
+            save_user_memory(username, user_data)
+        st.session_state.tourist_data = {"密码": None, "用户信息": {}, "待办任务": []}
 
 # ========== 页面设置 ==========
 st.set_page_config(page_title="我的AI助手", page_icon="🤖")
 st.title("🤖 我的AI助手")
 
+# ========== 初始化 Session State ==========
+if "user_id" not in st.session_state:
+    st.session_state.user_id = None
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+if "tourist_data" not in st.session_state:
+    st.session_state.tourist_data = {"密码": None, "用户信息": {}, "待办任务": []}
+
 # ========== 用户身份设置（侧边栏） ==========
 with st.sidebar:
     st.header("👤 用户")
     
-    # 初始化用户ID
-    if "user_id" not in st.session_state:
-        st.session_state.user_id = None
-    
-    # 显示当前状态
     if st.session_state.user_id:
         st.success(f"✅ 已登录：**{st.session_state.user_id}**")
         if st.button("🚪 退出登录", use_container_width=True):
@@ -142,26 +129,62 @@ with st.sidebar:
             st.rerun()
     else:
         st.info("👋 当前为游客模式")
-        st.caption("💡 输入姓名登录，或直接聊天时告诉AI你的名字")
+        st.caption("💡 登录后可使用待办任务和个人信息功能")
     
     st.divider()
     
-    # 手动登录区域
-    st.subheader("🔑 登录")
-    login_name = st.text_input(
-        "输入你的姓名：",
-        placeholder="例如：张三",
-        key="login_name_input"
-    )
+    # ===== 登录模块 =====
+    st.subheader("🔑 登录 / 注册")
     
-    if login_name:
-        if st.button("✅ 登录", use_container_width=True):
-            # 迁移游客数据
-            migrate_tourist_data(login_name.strip())
-            st.session_state.user_id = login_name.strip()
-            st.session_state.messages = []
-            st.success(f"已登录：{login_name}")
-            st.rerun()
+    login_name = st.text_input("👤 姓名", placeholder="请输入你的姓名", key="login_name_input")
+    login_password = st.text_input("🔒 密码", placeholder="请输入密码", type="password", key="login_password_input")
+    
+    if login_name and login_password:
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("✅ 登录", use_container_width=True, key="login_btn"):
+                all_data = load_all_memory()
+                user_name = login_name.strip()
+                
+                if user_name in all_data:
+                    stored_hash = all_data[user_name].get("密码")
+                    if stored_hash and verify_password(login_password, stored_hash):
+                        migrate_tourist_data(user_name)
+                        st.session_state.user_id = user_name
+                        st.session_state.messages = []
+                        st.success(f"✅ 欢迎回来，{user_name}！")
+                        st.rerun()
+                    else:
+                        st.error("❌ 密码错误，请重试")
+                else:
+                    st.warning(f"👋 {user_name} 是新用户，请点击「注册」按钮设置密码")
+        
+        with col2:
+            if st.button("📝 注册", use_container_width=True, key="register_btn"):
+                user_name = login_name.strip()
+                password = login_password.strip()
+                
+                if len(password) < 6:
+                    st.error("❌ 密码至少需要6位字符")
+                else:
+                    all_data = load_all_memory()
+                    if user_name in all_data:
+                        st.error("❌ 该用户名已被注册，请直接登录")
+                    else:
+                        password_hash = hash_password(password)
+                        all_data[user_name] = {
+                            "密码": password_hash,
+                            "用户信息": {},
+                            "待办任务": []
+                        }
+                        save_all_memory(all_data)
+                        migrate_tourist_data(user_name)
+                        st.session_state.user_id = user_name
+                        st.session_state.messages = []
+                        st.success(f"🎉 注册成功！欢迎 {user_name}！")
+                        st.rerun()
+    else:
+        st.caption("💡 输入姓名和密码后，点击「登录」或「注册」")
     
     st.divider()
     st.caption("📌 不同用户的记忆和任务独立保存")
@@ -234,16 +257,18 @@ for msg in st.session_state.messages:
 
 # ========== 输入框 ==========
 if prompt := st.chat_input("输入你的问题..."):
-    # 检测用户是否在自我介绍（提取姓名）
+    # 检测用户是否在自我介绍（提取姓名），但不再自动登录
     name_match = re.search(r'我叫\s*([^\s，,。.！!？?]+)', prompt)
     if name_match and not st.session_state.user_id:
         user_name = name_match.group(1).strip()
-        # 迁移游客数据到登录用户
-        migrate_tourist_data(user_name)
-        st.session_state.user_id = user_name
-        st.session_state.messages = []  # 清空游客的聊天记录
-        st.success(f"✅ 已自动识别并登录为：{user_name}")
-        st.rerun()
+        # 检查用户是否存在
+        all_data = load_all_memory()
+        if user_name in all_data:
+            st.info(f"💡 检测到您想以「{user_name}」身份登录，请在左侧侧边栏输入密码进行登录")
+        else:
+            st.info(f"💡 检测到新用户「{user_name}」，请在左侧侧边栏输入姓名和密码进行注册")
+        # 不再自动登录，直接退出本次输入
+        st.stop()
     
     # 添加用户消息
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -299,7 +324,7 @@ if prompt := st.chat_input("输入你的问题..."):
     if st.session_state.user_id:
         login_instruction = f"当前用户是 {user_id}，所有记忆都归属这个用户。"
     else:
-        login_instruction = "当前是游客模式，用户还没有告诉姓名。如果用户说了'我叫XXX'，你要记住这个名字，并在回答中自然地说'好的XXX，我记住你了'。"
+        login_instruction = "当前是游客模式，用户还没有登录。如果用户想登录，请引导去侧边栏输入姓名和密码。"
 
     prompt_with_time = f"""【当前时间：{time_str}】
 【用户状态：{"已登录" if st.session_state.user_id else "游客模式"}】
@@ -326,9 +351,7 @@ if prompt := st.chat_input("输入你的问题..."):
     messages_for_api = st.session_state.messages.copy()
     messages_for_api[-1] = {"role": "user", "content": prompt_with_time}
 
-    # ===== 提取信息 =====
-
-    # ---------- 1. 提取个人信息（增强版） ----------
+    # ---------- 1. 提取个人信息 ----------
     memory_extraction_prompt = f"""请分析用户的消息，提取出值得记住的个人信息。
 
 用户消息：{prompt}
@@ -365,9 +388,9 @@ if prompt := st.chat_input("输入你的问题..."):
             temperature=0.3,
             stream=False
         )
-        
+
         memory_text_response = memory_response.choices[0].message.content.strip()
-        
+
         try:
             new_memory = json.loads(memory_text_response)
             if new_memory:
@@ -377,21 +400,20 @@ if prompt := st.chat_input("输入你的问题..."):
                 user_data["用户信息"].update(new_memory)
                 save_user_memory(user_id, user_data)
                 print(f"✅ 已保存用户信息：{new_memory}")
-                
-                # 如果提取到了姓名，且当前是游客模式，自动切换登录
-                if "姓名" in new_memory and not st.session_state.user_id:
-                    user_name = new_memory["姓名"]
-                    # 迁移游客数据
-                    migrate_tourist_data(user_name)
-                    st.session_state.user_id = user_name
-                    st.session_state.messages = []
-                    st.success(f"✅ 已自动登录为：{user_name}")
-                    st.rerun()
+
+            # 如果提取到了姓名，且当前是游客模式，提示去登录
+            if "姓名" in new_memory and not st.session_state.user_id:
+                user_name = new_memory["姓名"]
+                all_data = load_all_memory()
+                if user_name in all_data:
+                    st.info(f"💡 检测到您想以「{user_name}」身份登录，请在左侧侧边栏输入密码进行登录")
+                else:
+                    st.info(f"💡 检测到新用户「{user_name}」，请在左侧侧边栏输入姓名和密码进行注册")
         except json.JSONDecodeError:
             print(f"⚠️ 记忆提取失败，AI返回：{memory_text_response}")
     except Exception as e:
         print(f"⚠️ 记忆提取出错：{e}")
-
+    
     # ---------- 2. 提取待办任务 ----------
     task_extraction_prompt = f"""请分析用户的消息，判断是否包含待办任务。
 
