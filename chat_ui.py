@@ -40,11 +40,23 @@ def inject_styles() -> None:
             --muted: #5f6b7a;
             --primary: #4f46e5;
             --primary-dark: #3730a3;
+            --primary-soft: #eeedff;
             --success: #0f766e;
             --canvas: #f6f7fb;
             --surface: #ffffff;
+            --surface-soft: #fafbff;
             --border: #e3e7ef;
+            --border-strong: #cfd5e2;
             --danger: #b42318;
+            --radius-sm: 10px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --radius-xl: 28px;
+            --shadow-1: 0 1px 2px rgba(23, 32, 51, .04),
+                        0 8px 22px rgba(23, 32, 51, .055);
+            --shadow-2: 0 2px 5px rgba(23, 32, 51, .05),
+                        0 18px 42px rgba(23, 32, 51, .09);
+            --shadow-focus: 0 0 0 4px rgba(79, 70, 229, .16);
         }
 
         html { font-size: 16px; }
@@ -52,19 +64,26 @@ def inject_styles() -> None:
             font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
             color: var(--ink);
         }
-        .stApp { background: var(--canvas); }
+        .stApp {
+            background:
+                radial-gradient(circle at 88% -8%, rgba(99, 102, 241, .1), transparent 30rem),
+                radial-gradient(circle at 14% 98%, rgba(20, 184, 166, .055), transparent 26rem),
+                var(--canvas);
+        }
         [data-testid="stHeader"] { background: transparent; }
         [data-testid="stAppDeployButton"] { display: none; }
         [data-testid="stMainBlockContainer"] {
             max-width: 1160px;
-            padding-top: 2.2rem;
-            padding-bottom: 4rem;
+            padding-top: 2.5rem;
+            padding-bottom: 5rem;
         }
         [data-testid="stSidebar"] {
-            background: #fbfbfd;
+            background: rgba(251, 251, 253, .94);
+            backdrop-filter: blur(22px);
             border-right: 1px solid var(--border);
+            box-shadow: 12px 0 36px rgba(23, 32, 51, .035);
         }
-        [data-testid="stSidebarContent"] { padding-top: 1.4rem; }
+        [data-testid="stSidebarContent"] { padding-top: 1.55rem; }
 
         h1, h2, h3 { color: var(--ink); letter-spacing: -0.025em; }
         p, li { line-height: 1.65; }
@@ -78,13 +97,16 @@ def inject_styles() -> None:
         .brand-mark {
             display: grid;
             place-items: center;
-            width: 42px;
-            height: 42px;
-            border-radius: 13px;
+            width: 44px;
+            height: 44px;
+            border: 1px solid rgba(255, 255, 255, .34);
+            border-radius: 15px;
             color: #fff;
-            background: var(--primary);
+            background: linear-gradient(145deg, #635bff 0%, var(--primary) 56%, #3f36d8 100%);
             font-weight: 750;
-            box-shadow: 0 8px 20px rgba(79, 70, 229, .2);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, .28),
+                0 9px 22px rgba(79, 70, 229, .24);
         }
         .brand-name { font-size: 1.05rem; font-weight: 700; color: var(--ink); }
         .brand-tagline { font-size: .78rem; color: var(--muted); margin-top: .08rem; }
@@ -94,7 +116,7 @@ def inject_styles() -> None:
             justify-content: space-between;
             align-items: flex-start;
             gap: 1.5rem;
-            margin-bottom: 1.4rem;
+            margin-bottom: 1.65rem;
         }
         .eyebrow {
             color: var(--primary);
@@ -121,15 +143,17 @@ def inject_styles() -> None:
             display: inline-flex;
             align-items: center;
             gap: .5rem;
-            min-height: 36px;
-            padding: 0 .8rem;
+            min-height: 40px;
+            padding: 0 .9rem;
             border: 1px solid #c9e7e2;
             border-radius: 999px;
             color: #0b665f;
-            background: #f0fdfa;
+            background: rgba(240, 253, 250, .88);
+            backdrop-filter: blur(12px);
             font-size: .82rem;
             font-weight: 650;
             white-space: nowrap;
+            box-shadow: 0 6px 18px rgba(15, 118, 110, .08);
         }
         .status-dot {
             width: 8px;
@@ -151,14 +175,104 @@ def inject_styles() -> None:
         .hero-card {
             position: relative;
             overflow: hidden;
-            padding: clamp(1.45rem, 4vw, 2.35rem);
-            margin: .9rem 0 1.3rem;
-            border: 1px solid #dfe2ff;
-            border-radius: 20px;
+            isolation: isolate;
+            padding: clamp(1.6rem, 4vw, 2.45rem);
+            margin: 1.15rem 0 1.45rem;
+            border: 1px solid rgba(190, 194, 255, .58);
+            border-radius: var(--radius-xl);
             background:
-                radial-gradient(circle at 95% 5%, rgba(79,70,229,.14), transparent 36%),
+                radial-gradient(circle at 95% 5%, rgba(79,70,229,.16), transparent 38%),
                 linear-gradient(135deg, #ffffff 0%, #f7f7ff 100%);
-            box-shadow: 0 18px 50px rgba(35, 42, 73, .07);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, .9),
+                var(--shadow-2);
+        }
+        .hero-card::before {
+            content: "";
+            position: absolute;
+            z-index: -1;
+            width: 210px;
+            height: 210px;
+            right: -72px;
+            top: -90px;
+            border: 38px solid rgba(99, 102, 241, .06);
+            border-radius: 50%;
+        }
+        .hero-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 190px;
+            align-items: center;
+            gap: 2rem;
+        }
+        .hero-content { min-width: 0; }
+        .hero-stack {
+            position: relative;
+            width: 176px;
+            height: 132px;
+            justify-self: end;
+        }
+        .stack-card {
+            position: absolute;
+            width: 142px;
+            height: 98px;
+            padding: 14px;
+            border: 1px solid rgba(151, 157, 226, .42);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .8);
+            backdrop-filter: blur(14px);
+            box-shadow: 0 14px 30px rgba(52, 55, 110, .12);
+        }
+        .stack-card.back {
+            top: 2px;
+            right: 2px;
+            transform: rotate(7deg);
+            background: rgba(230, 232, 255, .72);
+        }
+        .stack-card.middle {
+            top: 13px;
+            right: 17px;
+            transform: rotate(-4deg);
+            background: rgba(244, 245, 255, .9);
+        }
+        .stack-card.front {
+            top: 25px;
+            right: 8px;
+            background: rgba(255, 255, 255, .94);
+        }
+        .stack-label {
+            color: var(--primary);
+            font-size: .68rem;
+            font-weight: 750;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+        .stack-line {
+            display: block;
+            height: 7px;
+            margin-top: 9px;
+            border-radius: 999px;
+            background: #e7e9f3;
+        }
+        .stack-line.short { width: 62%; }
+        .stack-dot-row { display: flex; gap: 6px; margin-top: 12px; }
+        .stack-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 6px;
+            background: var(--primary-soft);
+        }
+        .stack-dot.active { background: #c9c5ff; }
+        .stack-file {
+            display: grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            margin-top: 10px;
+            border-radius: 10px;
+            color: var(--primary);
+            background: var(--primary-soft);
+            font-size: .62rem;
+            font-weight: 800;
         }
         .hero-kicker {
             color: var(--primary);
@@ -177,51 +291,125 @@ def inject_styles() -> None:
         .hero-copy { color: var(--muted); max-width: 40rem; margin: 0; }
 
         .metric-card {
-            min-height: 112px;
-            padding: 1rem 1.1rem;
+            position: relative;
+            overflow: hidden;
+            min-height: 116px;
+            padding: 1.15rem 1.25rem;
             border: 1px solid var(--border);
-            border-radius: 16px;
-            background: var(--surface);
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, .9);
+            box-shadow: var(--shadow-1);
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+        .metric-card::after {
+            content: "";
+            position: absolute;
+            width: 72px;
+            height: 72px;
+            right: -28px;
+            bottom: -30px;
+            border-radius: 50%;
+            background: var(--metric-tint, rgba(79, 70, 229, .08));
+        }
+        .metric-card:hover {
+            border-color: #d1d4f6;
+            box-shadow: var(--shadow-2);
         }
         .metric-label { color: var(--muted); font-size: .82rem; }
         .metric-value { color: var(--ink); font-size: 1.7rem; font-weight: 750; margin-top: .2rem; }
+        .metric-primary { --metric-tint: rgba(79, 70, 229, .11); }
+        .metric-progress { --metric-tint: rgba(217, 119, 6, .12); }
+        .metric-success { --metric-tint: rgba(15, 118, 110, .12); }
 
         .account-card {
-            padding: .9rem 1rem;
-            margin-bottom: .8rem;
+            padding: 1rem 1.05rem;
+            margin-bottom: .9rem;
             border: 1px solid var(--border);
-            border-radius: 14px;
-            background: #fff;
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, .9);
+            box-shadow: var(--shadow-1);
         }
         .account-label { color: var(--muted); font-size: .76rem; }
         .account-name { color: var(--ink); font-weight: 700; margin-top: .18rem; }
 
+        [data-testid="stTabs"] [role="tablist"],
         [data-testid="stTabs"] [data-baseweb="tab-list"] {
-            gap: .35rem;
-            padding: .28rem;
+            width: fit-content;
+            gap: .3rem;
+            padding: .3rem;
             border: 1px solid var(--border);
-            border-radius: 13px;
-            background: #eef0f5;
+            border-radius: var(--radius-md);
+            background: rgba(234, 236, 243, .86);
+            box-shadow: inset 0 1px 2px rgba(23, 32, 51, .045);
         }
+        [data-testid="stTabs"] [data-testid="stTab"],
         [data-testid="stTabs"] [data-baseweb="tab"] {
-            min-height: 42px;
-            border-radius: 9px;
-            padding: .5rem 1rem;
+            min-height: 44px;
+            border-radius: var(--radius-sm);
+            padding: .5rem 1.05rem;
+            color: var(--muted);
+            font-weight: 650;
         }
+        [data-testid="stTabs"] [data-testid="stTab"][data-selected="true"],
         [data-testid="stTabs"] [aria-selected="true"] {
             background: #fff;
-            box-shadow: 0 2px 8px rgba(23, 32, 51, .08);
+            color: var(--primary);
+            box-shadow: 0 1px 2px rgba(23, 32, 51, .06),
+                        0 5px 12px rgba(23, 32, 51, .08);
+        }
+        [data-testid="stTabs"] .react-aria-SelectionIndicator,
+        [data-testid="stTabs"] [data-baseweb="tab-highlight"],
+        [data-testid="stTabs"] [data-baseweb="tab-border"] { display: none; }
+        [data-testid="stSidebar"] [data-testid="stTabs"] [role="tablist"] {
+            width: 100%;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+        }
+        [data-testid="stSidebar"] [data-testid="stTab"] {
+            justify-content: center;
         }
 
         .stButton > button,
         .stFormSubmitButton > button,
-        .stDownloadButton > button {
-            min-height: 44px;
-            border-radius: 11px;
+        .stDownloadButton > button,
+        [data-testid="stPopoverButton"] > button {
+            min-height: 48px;
+            padding: .65rem 1.1rem;
+            border-radius: var(--radius-md);
             font-weight: 650;
+            letter-spacing: -.005em;
             cursor: pointer;
-            transition: border-color 180ms ease, color 180ms ease,
-                        background-color 180ms ease, box-shadow 180ms ease;
+            box-shadow: 0 1px 2px rgba(23, 32, 51, .04);
+            transition: transform 160ms ease, border-color 180ms ease,
+                        color 180ms ease, background-color 180ms ease,
+                        box-shadow 180ms ease;
+        }
+        .stButton > button[kind="secondary"],
+        .stFormSubmitButton > button[kind="secondary"],
+        [data-testid="stPopoverButton"] > button {
+            color: #303a50;
+            border-color: var(--border-strong);
+            background: linear-gradient(180deg, #ffffff 0%, #f8f9fc 100%);
+        }
+        .stButton > button[kind="secondary"]:hover,
+        .stFormSubmitButton > button[kind="secondary"]:hover,
+        [data-testid="stPopoverButton"] > button:hover {
+            color: var(--primary);
+            border-color: #b8b3ff;
+            background: #fff;
+            box-shadow: 0 7px 18px rgba(79, 70, 229, .1);
+        }
+        .stButton > button:active,
+        .stFormSubmitButton > button:active,
+        [data-testid="stPopoverButton"] > button:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 2px rgba(23, 32, 51, .08);
+        }
+        .stButton > button:disabled,
+        .stFormSubmitButton > button:disabled {
+            cursor: not-allowed;
+            opacity: .58;
+            box-shadow: none;
         }
         .stButton > button:focus-visible,
         .stFormSubmitButton > button:focus-visible,
@@ -231,38 +419,124 @@ def inject_styles() -> None:
             outline-offset: 2px;
         }
         .stButton > button[kind="primary"],
-        .stFormSubmitButton > button[kind="primary"] {
-            background: var(--primary);
+        .stFormSubmitButton > button[kind="primary"],
+        .stFormSubmitButton > button[kind="primaryFormSubmit"] {
+            color: #fff;
             border-color: var(--primary);
+            background: linear-gradient(180deg, #6259f5 0%, var(--primary) 62%, #443bd7 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, .22),
+                0 8px 18px rgba(79, 70, 229, .2);
         }
         .stButton > button[kind="primary"]:hover,
-        .stFormSubmitButton > button[kind="primary"]:hover {
-            background: var(--primary-dark);
+        .stFormSubmitButton > button[kind="primary"]:hover,
+        .stFormSubmitButton > button[kind="primaryFormSubmit"]:hover {
             border-color: var(--primary-dark);
+            background: linear-gradient(180deg, #554ce5 0%, var(--primary-dark) 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, .18),
+                0 10px 22px rgba(55, 48, 163, .24);
         }
 
         [data-testid="stChatMessage"] {
             border: 1px solid var(--border);
-            border-radius: 16px;
-            background: #fff;
-            padding: .35rem .45rem;
-            margin-bottom: .7rem;
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, .92);
+            padding: .5rem .6rem;
+            margin-bottom: .8rem;
+            box-shadow: var(--shadow-1);
         }
         [data-testid="stChatInput"] {
-            border-color: #cfd4df;
-            border-radius: 14px;
+            padding: .35rem;
+            border: 1px solid var(--border-strong);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .96);
+            box-shadow: 0 12px 34px rgba(23, 32, 51, .1);
+        }
+        [data-testid="stChatInput"]:focus-within {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-focus), 0 12px 34px rgba(23, 32, 51, .1);
+        }
+        [data-baseweb="input"] > div,
+        [data-baseweb="textarea"] > div,
+        [data-testid="stTextInputRootElement"],
+        [data-testid="stTextAreaRootElement"] {
+            min-height: 48px;
+            border-color: var(--border-strong);
+            border-radius: var(--radius-md);
+            background: var(--surface-soft);
+            transition: border-color 180ms ease, background-color 180ms ease,
+                        box-shadow 180ms ease;
+        }
+        [data-baseweb="input"]:focus-within > div,
+        [data-baseweb="textarea"]:focus-within > div,
+        [data-testid="stTextInputRootElement"]:focus-within,
+        [data-testid="stTextAreaRootElement"]:focus-within {
+            border-color: var(--primary);
             background: #fff;
+            box-shadow: var(--shadow-focus);
         }
         [data-testid="stFileUploaderDropzone"] {
-            min-height: 150px;
-            border-radius: 16px;
-            border-color: #cfd4df;
-            background: #fafbff;
+            min-height: 164px;
+            border: 1px dashed #b8bdd0;
+            border-radius: var(--radius-lg);
+            background:
+                radial-gradient(circle at 50% 0%, rgba(79, 70, 229, .06), transparent 55%),
+                var(--surface-soft);
         }
         [data-testid="stVerticalBlockBorderWrapper"] {
             border-color: var(--border);
-            border-radius: 16px;
-            background: #fff;
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, .92);
+            box-shadow: var(--shadow-1);
+            transition: border-color 180ms ease, box-shadow 180ms ease;
+        }
+        [data-testid="stVerticalBlockBorderWrapper"]:hover {
+            border-color: #d0d4e2;
+            box-shadow: var(--shadow-2);
+        }
+        [data-testid="stExpander"] {
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, .84);
+            box-shadow: var(--shadow-1);
+        }
+        [data-testid="stForm"] {
+            border-color: var(--border);
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, .9);
+            box-shadow: var(--shadow-1);
+        }
+        [data-testid="stAlert"] {
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(148, 163, 184, .22);
+        }
+        [data-baseweb="popover"] {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, .96);
+            box-shadow: 0 20px 55px rgba(23, 32, 51, .18);
+            backdrop-filter: blur(18px);
+        }
+        [data-testid="stPopoverBody"] {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            background: rgba(255, 255, 255, .96);
+            box-shadow: 0 20px 55px rgba(23, 32, 51, .18);
+            backdrop-filter: blur(18px);
+        }
+        [data-testid="stPopoverBody"] .stButton > button {
+            color: var(--danger);
+            border-color: #efc6c3;
+            background: #fffafa;
+            box-shadow: none;
+        }
+        [data-testid="stPopoverBody"] .stButton > button:hover {
+            color: #8f1d16;
+            border-color: #dcaaa6;
+            background: #fff4f3;
+            box-shadow: 0 7px 18px rgba(180, 35, 24, .09);
         }
         .task-done { color: var(--muted); text-decoration: line-through; }
         .file-meta { color: var(--muted); font-size: .85rem; }
@@ -275,7 +549,31 @@ def inject_styles() -> None:
             }
             .page-heading { display: block; }
             .status-pill { margin-top: 1rem; }
-            .hero-card { border-radius: 17px; }
+            .hero-card {
+                margin-top: 1rem;
+                border-radius: var(--radius-lg);
+            }
+            .hero-layout { display: block; }
+            .hero-stack { display: none; }
+            [data-testid="stTabs"] [role="tablist"],
+            [data-testid="stTabs"] [data-baseweb="tab-list"] {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+            }
+            [data-testid="stTabs"] [data-testid="stTab"],
+            [data-testid="stTabs"] [data-baseweb="tab"] {
+                justify-content: center;
+                padding-left: .6rem;
+                padding-right: .6rem;
+            }
+            [data-testid="stSidebar"] [data-testid="stTabs"] [role="tablist"] {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .metric-card {
+                min-height: 104px;
+                padding: 1rem;
+            }
         }
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
@@ -363,7 +661,11 @@ def render_sidebar() -> None:
                 """,
                 unsafe_allow_html=True,
             )
-            if st.button("退出登录", use_container_width=True):
+            if st.button(
+                "退出登录",
+                icon=":material/logout:",
+                use_container_width=True,
+            ):
                 st.session_state.user_id = None
                 st.session_state.messages = []
                 st.rerun()
@@ -384,6 +686,7 @@ def render_sidebar() -> None:
                 submitted = st.form_submit_button(
                     "登录",
                     type="primary",
+                    icon=":material/login:",
                     use_container_width=True,
                 )
             if submitted:
@@ -408,6 +711,7 @@ def render_sidebar() -> None:
                 registered = st.form_submit_button(
                     "创建账户",
                     type="primary",
+                    icon=":material/person_add:",
                     use_container_width=True,
                 )
             if registered:
@@ -456,25 +760,56 @@ def render_chat(api_key: str) -> None:
         st.markdown(
             """
             <section class="hero-card">
-              <div class="hero-kicker">从一个具体问题开始</div>
-              <h2 class="hero-title">课程规划、奖学金规则或今天的学习安排，都可以一起梳理。</h2>
-              <p class="hero-copy">
-                我会结合已上传的资料和你的个人进度回答，并把明确的待办自动整理到任务页。
-              </p>
+              <div class="hero-layout">
+                <div class="hero-content">
+                  <div class="hero-kicker">从一个具体问题开始</div>
+                  <h2 class="hero-title">课程规划、奖学金规则或今天的学习安排，都可以一起梳理。</h2>
+                  <p class="hero-copy">
+                    我会结合已上传的资料和你的个人进度回答，并把明确的待办自动整理到任务页。
+                  </p>
+                </div>
+                <div class="hero-stack" aria-hidden="true">
+                  <div class="stack-card back"></div>
+                  <div class="stack-card middle"></div>
+                  <div class="stack-card front">
+                    <div class="stack-label">Study plan</div>
+                    <span class="stack-line"></span>
+                    <span class="stack-line short"></span>
+                    <div class="stack-dot-row">
+                      <span class="stack-dot active"></span>
+                      <span class="stack-dot"></span>
+                      <span class="stack-dot"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </section>
             """,
             unsafe_allow_html=True,
         )
         quick_prompts = [
-            ("梳理本周计划", "根据我的待办，帮我安排本周学习计划。"),
-            ("查询奖学金规则", "请帮我梳理奖学金评定的关键条件。"),
-            ("查看今日课程", "我今天有哪些课程？请按时间排序。"),
+            (
+                "梳理本周计划",
+                "根据我的待办，帮我安排本周学习计划。",
+                ":material/calendar_view_week:",
+            ),
+            (
+                "查询奖学金规则",
+                "请帮我梳理奖学金评定的关键条件。",
+                ":material/workspace_premium:",
+            ),
+            (
+                "查看今日课程",
+                "我今天有哪些课程？请按时间排序。",
+                ":material/calendar_today:",
+            ),
         ]
         columns = st.columns(3)
-        for column, (label, prompt) in zip(columns, quick_prompts):
+        for column, (label, prompt, icon) in zip(columns, quick_prompts):
             with column:
                 if st.button(
                     label,
+                    icon=icon,
                     use_container_width=True,
                     disabled=not api_key,
                     key=f"quick-{label}",
@@ -548,15 +883,15 @@ def render_tasks() -> None:
 
     metric_columns = st.columns(3)
     metrics = [
-        ("全部任务", len(tasks)),
-        ("进行中", pending_count),
-        ("已完成", completed_count),
+        ("全部任务", len(tasks), "metric-primary"),
+        ("进行中", pending_count, "metric-progress"),
+        ("已完成", completed_count, "metric-success"),
     ]
-    for column, (label, value) in zip(metric_columns, metrics):
+    for column, (label, value, metric_class) in zip(metric_columns, metrics):
         with column:
             st.markdown(
                 f"""
-                <div class="metric-card">
+                <div class="metric-card {metric_class}">
                   <div class="metric-label">{label}</div>
                   <div class="metric-value">{value}</div>
                 </div>
@@ -568,7 +903,11 @@ def render_tasks() -> None:
         with st.form("add_task_form", clear_on_submit=True):
             title = st.text_input("任务内容", placeholder="例如：完成数据结构作业")
             deadline = st.text_input("截止时间", placeholder="例如：本周五 18:00")
-            add_task = st.form_submit_button("添加任务", type="primary")
+            add_task = st.form_submit_button(
+                "添加任务",
+                type="primary",
+                icon=":material/add_task:",
+            )
         if add_task:
             if not title.strip():
                 st.error("请填写任务内容")
@@ -610,6 +949,7 @@ def render_tasks() -> None:
                 action_label = "恢复" if completed else "完成"
                 if st.button(
                     action_label,
+                    icon=":material/undo:" if completed else ":material/check:",
                     key=f"task-state-{index}",
                     use_container_width=True,
                 ):
@@ -618,15 +958,22 @@ def render_tasks() -> None:
                     save_current_user(user_data)
                     st.rerun()
             with delete_column:
-                if st.button(
-                    "删除",
-                    key=f"task-delete-{index}",
+                with st.popover(
+                    "更多",
+                    icon=":material/more_horiz:",
                     use_container_width=True,
                 ):
-                    tasks.pop(index)
-                    user_data["待办任务"] = tasks
-                    save_current_user(user_data)
-                    st.rerun()
+                    st.caption("删除后无法恢复。")
+                    if st.button(
+                        "删除任务",
+                        icon=":material/delete:",
+                        key=f"task-delete-{index}",
+                        use_container_width=True,
+                    ):
+                        tasks.pop(index)
+                        user_data["待办任务"] = tasks
+                        save_current_user(user_data)
+                        st.rerun()
 
     if not st.session_state.user_id:
         st.caption("游客任务只在当前浏览会话中保留；登录后可持久保存。")
@@ -647,11 +994,24 @@ def render_knowledge() -> None:
     st.markdown(
         """
         <section class="hero-card">
-          <div class="hero-kicker">Knowledge library</div>
-          <h2 class="hero-title">让回答建立在你信任的资料上。</h2>
-          <p class="hero-copy">
-            上传 UTF-8 编码的 TXT 文件。适合课程表、培养方案、评奖规则和个人学习笔记。
-          </p>
+          <div class="hero-layout">
+            <div class="hero-content">
+              <div class="hero-kicker">Knowledge library</div>
+              <h2 class="hero-title">让回答建立在你信任的资料上。</h2>
+              <p class="hero-copy">
+                上传 UTF-8 编码的 TXT 文件。适合课程表、培养方案、评奖规则和个人学习笔记。
+              </p>
+            </div>
+            <div class="hero-stack" aria-hidden="true">
+              <div class="stack-card back"></div>
+              <div class="stack-card middle"></div>
+              <div class="stack-card front">
+                <div class="stack-label">Library</div>
+                <div class="stack-file">TXT</div>
+                <span class="stack-line short"></span>
+              </div>
+            </div>
+          </div>
         </section>
         """,
         unsafe_allow_html=True,
@@ -661,7 +1021,7 @@ def render_knowledge() -> None:
     with summary_columns[0]:
         st.markdown(
             f"""
-            <div class="metric-card">
+            <div class="metric-card metric-primary">
               <div class="metric-label">资料数量</div>
               <div class="metric-value">{len(files)}</div>
             </div>
@@ -671,7 +1031,7 @@ def render_knowledge() -> None:
     with summary_columns[1]:
         st.markdown(
             f"""
-            <div class="metric-card">
+            <div class="metric-card metric-success">
               <div class="metric-label">占用空间</div>
               <div class="metric-value">{format_size(total_size)}</div>
             </div>
@@ -685,7 +1045,11 @@ def render_knowledge() -> None:
         accept_multiple_files=True,
         help="单个文件不超过 2 MB，需使用 UTF-8 编码。",
     )
-    if uploads and st.button("保存所选文件", type="primary"):
+    if uploads and st.button(
+        "保存所选文件",
+        type="primary",
+        icon=":material/save:",
+    ):
         saved = 0
         for upload in uploads:
             try:
@@ -713,13 +1077,20 @@ def render_knowledge() -> None:
                     unsafe_allow_html=True,
                 )
             with action_column:
-                if st.button(
-                    "删除",
-                    key=f"knowledge-delete-{index}",
+                with st.popover(
+                    "更多",
+                    icon=":material/more_horiz:",
                     use_container_width=True,
                 ):
-                    knowledge_base.delete(item["name"])
-                    st.rerun()
+                    st.caption("该文件将从知识库中移除。")
+                    if st.button(
+                        "删除文件",
+                        icon=":material/delete:",
+                        key=f"knowledge-delete-{index}",
+                        use_container_width=True,
+                    ):
+                        knowledge_base.delete(item["name"])
+                        st.rerun()
 
 
 inject_styles()
