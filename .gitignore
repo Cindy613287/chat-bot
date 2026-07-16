@@ -1,5 +1,6 @@
 # 敏感信息（包含 API Key）
-config.py
+.streamlit/secrets.toml
+.env
 
 # 用户数据（隐私）
 memory.json
@@ -10,7 +11,18 @@ memory.json
 # Python 缓存
 __pycache__/
 *.pyc
+.pytest_cache/
+.coverage
 
 # 系统文件
 .DS_Store
 Thumbs.db
+
+# 虚拟环境与构建产物
+.venv/
+venv/
+dist/
+build/
+
+# 内部设计过程文档
+design-system/
