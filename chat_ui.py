@@ -642,7 +642,7 @@ def render_sidebar() -> None:
             <div class="brand">
               <div class="brand-mark" aria-hidden="true">知</div>
               <div>
-                <div class="brand-name">知行</div>
+                <div class="brand-name">知小忆</div>
                 <div class="brand-tagline">AI 学习工作台</div>
               </div>
             </div>
