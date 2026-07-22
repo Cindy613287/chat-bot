@@ -807,7 +807,10 @@ def render_chat(api_key: str) -> None:
         if due_date:
             delta = (due_date - today).days
             # 如果任务在 0 ~ 3 天内到期（0代表今天到期）
-            if 0 <= delta <= 3:
+            # 【修改为 True】，所有未完成的任务都会在上方弹出提醒！
+            if True:  
+                urgency_level = "紧急" if delta == 0 else ("即将到期" if delta <= 2 else "临近到期")
+            # ...后面的代码不变...
                 urgency_level = "紧急" if delta == 0 else ("即将到期" if delta <= 2 else "临近到期")
                 urgent_alerts.append({
                     "task": task.get("任务", "未命名任务"),
