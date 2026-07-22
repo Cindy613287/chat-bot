@@ -61,6 +61,7 @@ def parse_deadline_to_date(deadline_str: str) -> datetime.date | None:
         except ValueError:
             pass
     return None
+
 def inject_styles() -> None:
     st.html(
         """
@@ -786,67 +787,40 @@ def submit_quick_prompt(prompt: str) -> None:
 
 
 def render_chat(api_key: str) -> None:
-    # --- 【新增】主动感知与提醒逻辑 开始 ---
-    # 在每次渲染对话时，检查当前用户是否有即将到期的任务
+    # --- 【新增】主动感知与提醒逻辑 (强制触发版) 开始 ---
     user_data = current_user_data()
     tasks = user_data.get("待办任务", [])
     
-    today = datetime.date.today()
-    urgent_alerts = []
+    # 查找是否有“未完成”的任务
+    has_pending_task = False
+    pending_task_names = []
     
     for task in tasks:
-        if task.get("状态") == "已完成":
-            continue
-            
-        deadline_str = task.get("截止时间", "")
-        if not deadline_str or deadline_str == "无":
-            continue
-            
-        # 尝试解析截止时间
-        due_date = parse_deadline_to_date(deadline_str)
-        if due_date:
-            delta = (due_date - today).days
-            # 如果任务在 0 ~ 3 天内到期（0代表今天到期）
-            # 【修改为 True】，所有未完成的任务都会在上方弹出提醒！
-            if True:  
-                urgency_level = "紧急"
-            # ...后面的代码不变...
-                urgent_alerts.append({
-                    "task": task.get("任务", "未命名任务"),
-                    "days": delta,
-                    "label": urgency_level,
-                    "deadline": deadline_str
-                })
+        if task.get("状态") != "已完成":
+            has_pending_task = True
+            pending_task_names.append(task.get("任务", "未命名任务"))
     
-    # 如果有紧急任务，在主界面主动弹出提醒（这就是“主动触达”）
-    if urgent_alerts:
-        alert_messages = []
-        for item in urgent_alerts:
-            if item['days'] == 0:
-                msg = f"⚠️ 今天截止：{item['task']}"
-            elif item['days'] == 1:
-                msg = f"⏰ 明天截止：{item['task']}"
-            else:
-                msg = f"📅 {item['days']}天后截止：{item['task']}"
-            alert_messages.append(msg)
+    # 只要有一个未完成的任务，就在对话页最上面主动弹窗
+    if has_pending_task:
+        task_list_str = "\n".join([f"- {name}" for name in pending_task_names])
         
-        # 使用 st.error 或 st.warning 生成明显的横幅，比普通 info 更吸睛
-        # 注意：这里必须放在 chat_messages 渲染之前，才能显示在对话流上方
-        full_alert = "### 🔔 检测到您的待办任务即将到期，请注意安排：\n" + "\n".join([f"- {m}" for m in alert_messages])
-        full_alert += "\n\n*（我是你的 Agent 助手，看到任务临近了，特来主动提醒您。）*"
+        full_alert = (
+            "### 🔔 检测到您有待办任务尚未完成，请注意安排时间：\n"
+            f"{task_list_str}\n\n"
+            "*（我是您的学习 Agent，检测到任务未完成，特来主动提醒您。）*"
+        )
         
+        # 使用 st.info 显示明显的横幅（放在输入框上方）
         st.info(full_alert, icon="⏰")
         
-        # 如果时间非常紧迫（今天或明天），额外加一个可操作的按钮
-        has_critical = any(item['days'] <= 1 for item in urgent_alerts)
-        if has_critical:
-            col1, col2 = st.columns([2, 1])
-            with col1:
-                st.caption("💡 需要我根据这些任务，帮您生成今日优先执行清单吗？")
-            with col2:
-                if st.button("生成执行清单 (行动闭环)", type="primary", key="urgent_action_btn"):
-                    st.session_state.pending_prompt = "帮我根据今天的紧急待办任务，生成一个今日优先级执行清单。"
-                    st.rerun()
+        # 提供一个立刻“行动”的按钮，形成任务闭环
+        col1, col2 = st.columns([2, 1])
+        with col1:
+            st.caption("💡 需要我帮您规划一下今天的任务执行顺序吗？")
+        with col2:
+            if st.button("生成今日执行清单 (行动闭环)", type="primary", key="urgent_action_btn"):
+                st.session_state.pending_prompt = "请帮我根据当前的待办任务，生成一个今日的优先级执行清单。"
+                st.rerun()
                     
     # --- 【新增】主动感知与提醒逻辑 结束 ---
 
