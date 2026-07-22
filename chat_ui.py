@@ -30,7 +30,37 @@ st.set_page_config(
 store = UserStore(MEMORY_FILE)
 knowledge_base = KnowledgeBase(KNOWLEDGE_DIR, max_upload_bytes=MAX_UPLOAD_BYTES)
 
+import datetime
+import re
 
+def parse_deadline_to_date(deadline_str: str) -> datetime.date | None:
+    """从自然语言中简单提取日期，用于演示主动提醒逻辑"""
+    today = datetime.date.today()
+    
+    # 匹配 "周五", "下周一" 等
+    weekday_map = {"周一": 0, "周二": 1, "周三": 2, "周四": 3, "周五": 4, "周六": 5, "周日": 6}
+    
+    # 简单正则提取
+    match = re.search(r"(下周)?(?:周([一二三四五六日]))", deadline_str)
+    if match:
+        target_weekday = weekday_map.get(f"周{match.group(2)}", -1)
+        if target_weekday != -1:
+            days_ahead = (target_weekday - today.weekday()) % 7
+            if match.group(1): # 如果是下周
+                days_ahead += 7
+            # 如果天数超过3天，为了演示效果，强行让它低于3天（这里为了演示，就不做复杂处理了）
+            # 考试周演练，重点展示触发效果。
+            return today + datetime.timedelta(days=days_ahead)
+            
+    # 匹配 "7月30日" 格式
+    match_date = re.search(r"(\d{1,2})月(\d{1,2})日", deadline_str)
+    if match_date:
+        try:
+            month, day = int(match_date.group(1)), int(match_date.group(2))
+            return datetime.date(today.year, month, day)
+        except ValueError:
+            pass
+    return None
 def inject_styles() -> None:
     st.html(
         """
@@ -756,6 +786,70 @@ def submit_quick_prompt(prompt: str) -> None:
 
 
 def render_chat(api_key: str) -> None:
+    # --- 【新增】主动感知与提醒逻辑 开始 ---
+    # 在每次渲染对话时，检查当前用户是否有即将到期的任务
+    user_data = current_user_data()
+    tasks = user_data.get("待办任务", [])
+    
+    today = datetime.date.today()
+    urgent_alerts = []
+    
+    for task in tasks:
+        if task.get("状态") == "已完成":
+            continue
+            
+        deadline_str = task.get("截止时间", "")
+        if not deadline_str or deadline_str == "无":
+            continue
+            
+        # 尝试解析截止时间
+        due_date = parse_deadline_to_date(deadline_str)
+        if due_date:
+            delta = (due_date - today).days
+            # 如果任务在 0 ~ 3 天内到期（0代表今天到期）
+            if 0 <= delta <= 3:
+                urgency_level = "紧急" if delta == 0 else ("即将到期" if delta <= 2 else "临近到期")
+                urgent_alerts.append({
+                    "task": task.get("任务", "未命名任务"),
+                    "days": delta,
+                    "label": urgency_level,
+                    "deadline": deadline_str
+                })
+    
+    # 如果有紧急任务，在主界面主动弹出提醒（这就是“主动触达”）
+    if urgent_alerts:
+        alert_messages = []
+        for item in urgent_alerts:
+            if item['days'] == 0:
+                msg = f"⚠️ 今天截止：{item['task']}"
+            elif item['days'] == 1:
+                msg = f"⏰ 明天截止：{item['task']}"
+            else:
+                msg = f"📅 {item['days']}天后截止：{item['task']}"
+            alert_messages.append(msg)
+        
+        # 使用 st.error 或 st.warning 生成明显的横幅，比普通 info 更吸睛
+        # 注意：这里必须放在 chat_messages 渲染之前，才能显示在对话流上方
+        full_alert = "### 🔔 检测到您的待办任务即将到期，请注意安排：\n" + "\n".join([f"- {m}" for m in alert_messages])
+        full_alert += "\n\n*（我是你的 Agent 助手，看到任务临近了，特来主动提醒您。）*"
+        
+        st.info(full_alert, icon="⏰")
+        
+        # 如果时间非常紧迫（今天或明天），额外加一个可操作的按钮
+        has_critical = any(item['days'] <= 1 for item in urgent_alerts)
+        if has_critical:
+            col1, col2 = st.columns([2, 1])
+            with col1:
+                st.caption("💡 需要我根据这些任务，帮您生成今日优先执行清单吗？")
+            with col2:
+                if st.button("生成执行清单 (行动闭环)", type="primary", key="urgent_action_btn"):
+                    st.session_state.pending_prompt = "帮我根据今天的紧急待办任务，生成一个今日优先级执行清单。"
+                    st.rerun()
+                    
+    # --- 【新增】主动感知与提醒逻辑 结束 ---
+
+
+    # --- 以下是原本的 Chat 交互逻辑 ---
     if not st.session_state.messages:
         st.markdown(
             """
