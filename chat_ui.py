@@ -2,6 +2,9 @@ from __future__ import annotations
 
 import html
 import os
+import datetime
+import re
+import pytz  # 新增：用于处理北京时间时区
 from copy import deepcopy
 from typing import Any
 
@@ -30,37 +33,66 @@ st.set_page_config(
 store = UserStore(MEMORY_FILE)
 knowledge_base = KnowledgeBase(KNOWLEDGE_DIR, max_upload_bytes=MAX_UPLOAD_BYTES)
 
-import datetime
-import re
 
 def parse_deadline_to_date(deadline_str: str) -> datetime.date | None:
-    """从自然语言中简单提取日期，用于演示主动提醒逻辑"""
-    today = datetime.date.today()
+    """从自然语言中提取日期，强制基于北京时间计算（解决服务器时间差）"""
+    # 强制获取北京时间日期
+    beijing_tz = pytz.timezone('Asia/Shanghai')
+    today = datetime.datetime.now(beijing_tz).date()
     
-    # 匹配 "周五", "下周一" 等
-    weekday_map = {"周一": 0, "周二": 1, "周三": 2, "周四": 3, "周五": 4, "周六": 5, "周日": 6}
+    text = deadline_str.strip()
     
-    # 简单正则提取
-    match = re.search(r"(下周)?(?:周([一二三四五六日]))", deadline_str)
-    if match:
-        target_weekday = weekday_map.get(f"周{match.group(2)}", -1)
-        if target_weekday != -1:
+    if not text:
+        return None
+
+    # 1. 匹配 "今天"
+    if "今天" in text:
+        return today
+        
+    # 2. 匹配 "明天"
+    if "明天" in text:
+        return today + datetime.timedelta(days=1)
+        
+    # 3. 匹配 "后天"
+    if "后天" in text:
+        return today + datetime.timedelta(days=2)
+
+    # 4. 匹配 "下周X" 或 "周X" (例如：下周一, 周五)
+    weekday_map = {"一": 0, "二": 1, "三": 2, "四": 3, "五": 4, "六": 5, "日": 6, "天": 6}
+    match_week = re.search(r"(下周)?[周星期]([一二三四五六日天])", text)
+    if match_week:
+        target_weekday = weekday_map.get(match_week.group(2))
+        if target_weekday is not None:
             days_ahead = (target_weekday - today.weekday()) % 7
-            if match.group(1): # 如果是下周
+            if match_week.group(1):
                 days_ahead += 7
-            # 如果天数超过3天，为了演示效果，强行让它低于3天（这里为了演示，就不做复杂处理了）
-            # 考试周演练，重点展示触发效果。
+            if days_ahead == 0:
+                days_ahead = 7
             return today + datetime.timedelta(days=days_ahead)
-            
-    # 匹配 "7月30日" 格式
-    match_date = re.search(r"(\d{1,2})月(\d{1,2})日", deadline_str)
+
+    # 5. 匹配 "X月X日"
+    match_date = re.search(r"(\d{1,2})月(\d{1,2})日?", text)
     if match_date:
         try:
             month, day = int(match_date.group(1)), int(match_date.group(2))
-            return datetime.date(today.year, month, day)
+            date_obj = datetime.date(today.year, month, day)
+            if date_obj < today:
+                date_obj = datetime.date(today.year + 1, month, day)
+            return date_obj
         except ValueError:
             pass
+            
+    # 6. 匹配 "X天后"
+    match_after = re.search(r"(\d+)\s*天后", text)
+    if match_after:
+        try:
+            days = int(match_after.group(1))
+            return today + datetime.timedelta(days=days)
+        except ValueError:
+            pass
+
     return None
+
 
 def inject_styles() -> None:
     st.html(
@@ -791,23 +823,39 @@ def render_chat(api_key: str) -> None:
     user_data = current_user_data()
     tasks = user_data.get("待办任务", [])
     
-    # 查找是否有“未完成”的任务
-    has_pending_task = False
+    # 强制获取北京时间日期（在渲染对话时再次校准）
+    beijing_tz = pytz.timezone('Asia/Shanghai')
+    today = datetime.datetime.now(beijing_tz).date()
+    
+    # 查找是否有“未完成”的任务，且任务即将到期（0~3天内）
+    has_pending_alert = False
     pending_task_names = []
     
     for task in tasks:
-        if task.get("状态") != "已完成":
-            has_pending_task = True
-            pending_task_names.append(task.get("任务", "未命名任务"))
+        if task.get("状态") == "已完成":
+            continue
+            
+        deadline_str = task.get("截止时间", "")
+        if not deadline_str or deadline_str == "无":
+            continue
+            
+        # 尝试解析截止时间（使用北京时间today）
+        due_date = parse_deadline_to_date(deadline_str)
+        if due_date:
+            delta = (due_date - today).days
+            # 只有在 0 ~ 3 天以内才触发（体现智能、克制力，防止无脑弹窗）
+            if 0 <= delta <= 3:
+                has_pending_alert = True
+                pending_task_names.append(f"{task.get('任务', '未命名任务')} ({delta}天后截止)")
     
-    # 只要有一个未完成的任务，就在对话页最上面主动弹窗
-    if has_pending_task:
+    # 只要有一个未完成的任务临近，就在对话页最上面主动弹窗
+    if has_pending_alert:
         task_list_str = "\n".join([f"- {name}" for name in pending_task_names])
         
         full_alert = (
-            "### 🔔 检测到您有待办任务尚未完成，请注意安排时间：\n"
+            "### 🔔 检测到您有即将到期的待办任务，请注意安排时间：\n"
             f"{task_list_str}\n\n"
-            "*（我是您的学习 Agent，检测到任务未完成，特来主动提醒您。）*"
+            "*（我是您的学习 Agent，检测到任务即将到期，特来主动提醒您。）*"
         )
         
         # 使用 st.info 显示明显的横幅（放在输入框上方）
