@@ -4,7 +4,6 @@ import html
 import os
 import datetime
 import re
-import pytz  # 新增：用于处理北京时间时区
 from copy import deepcopy
 from typing import Any
 
@@ -35,10 +34,9 @@ knowledge_base = KnowledgeBase(KNOWLEDGE_DIR, max_upload_bytes=MAX_UPLOAD_BYTES)
 
 
 def parse_deadline_to_date(deadline_str: str) -> datetime.date | None:
-    """从自然语言中提取日期，强制基于北京时间计算（解决服务器时间差）"""
-    # 强制获取北京时间日期
-    beijing_tz = pytz.timezone('Asia/Shanghai')
-    today = datetime.datetime.now(beijing_tz).date()
+    """从自然语言中提取日期，强制基于北京时间计算（使用原生库，无 pytz 依赖）"""
+    # 使用 UTC + 8 小时精准获取北京时间日期
+    today = (datetime.datetime.utcnow() + datetime.timedelta(hours=8)).date()
     
     text = deadline_str.strip()
     
@@ -819,13 +817,12 @@ def submit_quick_prompt(prompt: str) -> None:
 
 
 def render_chat(api_key: str) -> None:
-    # --- 【新增】主动感知与提醒逻辑 (强制触发版) 开始 ---
+    # --- 【新增】主动感知与提醒逻辑 开始 ---
     user_data = current_user_data()
     tasks = user_data.get("待办任务", [])
     
-    # 强制获取北京时间日期（在渲染对话时再次校准）
-    beijing_tz = pytz.timezone('Asia/Shanghai')
-    today = datetime.datetime.now(beijing_tz).date()
+    # 使用 UTC + 8 小时精准获取北京时间日期
+    today = (datetime.datetime.utcnow() + datetime.timedelta(hours=8)).date()
     
     # 查找是否有“未完成”的任务，且任务即将到期（0~3天内）
     has_pending_alert = False
@@ -858,10 +855,8 @@ def render_chat(api_key: str) -> None:
             "*（我是您的学习 Agent，检测到任务即将到期，特来主动提醒您。）*"
         )
         
-        # 使用 st.info 显示明显的横幅（放在输入框上方）
         st.info(full_alert, icon="⏰")
         
-        # 提供一个立刻“行动”的按钮，形成任务闭环
         col1, col2 = st.columns([2, 1])
         with col1:
             st.caption("💡 需要我帮您规划一下今天的任务执行顺序吗？")
@@ -968,6 +963,11 @@ def render_chat(api_key: str) -> None:
 
     history = st.session_state.messages
     knowledge = knowledge_base.load_content(max_chars=MAX_KNOWLEDGE_CHARS)
+    
+    # --- 【新增】获取精确的北京时间字符串（含时分秒） ---
+    beijing_now = datetime.datetime.utcnow() + datetime.timedelta(hours=8)
+    current_time_str = beijing_now.strftime("%Y年%m月%d日 %H:%M:%S")
+    
     with st.chat_message("assistant"):
         placeholder = st.empty()
         full_response = ""
@@ -978,6 +978,7 @@ def render_chat(api_key: str) -> None:
                 user_name=current_user_name(),
                 user_data=updated_user_data,
                 knowledge=knowledge,
+                current_time=current_time_str, # 【关键】将北京时间传给 AI 服务
             ):
                 full_response += content
                 placeholder.markdown(f"{full_response}▌")
