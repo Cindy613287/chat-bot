@@ -105,8 +105,9 @@ class AssistantService:
         user_name: str,
         user_data: dict[str, Any],
         knowledge: str,
+        current_time: str = None,
     ) -> Iterable[str]:
-        now = datetime.now().strftime("%Y年%m月%d日 %H:%M")
+        now = current_time if current_time else datetime.now().strftime("%Y年%m月%d日 %H:%M")
         profile = json.dumps(user_data.get("用户信息", {}), ensure_ascii=False)
         tasks = json.dumps(user_data.get("待办任务", []), ensure_ascii=False)
         system_prompt = f"""
