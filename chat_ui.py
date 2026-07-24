@@ -8,7 +8,7 @@ from copy import deepcopy
 from typing import Any
 
 import streamlit as st
-
+from learning_analysis import generate_analysis
 from app.assistant import AssistantService, apply_actions
 from app.config import (
     APP_NAME,
@@ -1219,10 +1219,21 @@ render_sidebar()
 api_key = get_api_key()
 render_heading(bool(api_key))
 
-chat_tab, task_tab, knowledge_tab = st.tabs(["对话", "任务", "知识库"])
+# === 修改后的 tabs 区域 ===
+chat_tab, task_tab, knowledge_tab, analysis_tab = st.tabs(["对话", "任务", "知识库", "📊 学情分析"])
+
 with chat_tab:
     render_chat(api_key)
+
 with task_tab:
     render_tasks()
+
 with knowledge_tab:
     render_knowledge()
+
+# --- 新增的学情分析代码 ---
+with analysis_tab:
+    # 获取当前用户的数据
+    user_data = current_user_data()
+    # 调用刚刚新建的独立文件中的函数，直接传真实数据进去
+    generate_analysis(user_data)
