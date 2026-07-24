@@ -2,3 +2,5 @@ streamlit>=1.40,<2
 openai>=1.50,<2
 pdfplumber>=0.11,<1
 pytz
+plotly
+pandas
